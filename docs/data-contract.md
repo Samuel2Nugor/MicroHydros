@@ -96,7 +96,7 @@ The `device_id` inside the JSON payload must match the device identifier in the 
 
 ## Raw telemetry contract
 
-The ESP32-S3 publishes one combined raw telemetry message every 30 seconds.
+The ESP32-S3 publishes one combined raw telemetry message every 5 seconds.
 
 Each measurement is later validated independently by Node-RED. A failed measurement must not prevent other valid measurements from being published.
 
@@ -113,7 +113,7 @@ microhydros/v1/devices/{device_id}/telemetry/raw
 | QoS | `1` |
 | Retained | `false` |
 | Payload format | UTF-8 JSON |
-| Publishing interval | 30 seconds |
+| Publishing interval | 5 seconds |
 
 ### Example valid raw payload
 

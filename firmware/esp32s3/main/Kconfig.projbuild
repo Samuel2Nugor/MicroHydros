@@ -1,0 +1,43 @@
+menu "MicroHydros Configuration"
+
+    config WIFI_SSID
+        string "WiFi SSID"
+        default "your_ssid"
+
+    config WIFI_PASSWORD
+        string "WiFi Password"
+        default "your_password"
+
+    config MQTT_BROKER_URL
+        string "MQTT Broker URL"
+        default "mqtt://95.216.208.235:1884"
+
+    config DEVICE_ID
+        string "Device ID"
+        default "esp32s3-01"
+
+    config ONEWIRE_GPIO
+        int "1-Wire GPIO pin"
+        default 4
+
+    config DS18B20_WATER_ROM
+        string "DS18B20 water-probe ROM (16 hex chars, empty = auto)"
+        default ""
+
+    config DS18B20_EXTERNAL_ROM
+        string "DS18B20 external-probe ROM (16 hex chars, empty = auto)"
+        default ""
+
+    config I2C_SDA_GPIO
+        int "I2C SDA GPIO pin"
+        default 8
+
+    config I2C_SCL_GPIO
+        int "I2C SCL GPIO pin"
+        default 9
+
+    config TELEMETRY_INTERVAL_SEC
+        int "Telemetry publish interval (seconds)"
+        default 5
+
+endmenu

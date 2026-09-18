@@ -55,7 +55,7 @@ All four measurements validate and route to individual `validated/` topics:
 docker exec microhydros-mosquitto mosquitto_pub -h localhost \
   -t microhydros/v1/devices/simulator-01/telemetry/raw \
   -q 1 \
-  -m '{"schema_version":1,"device_id":"simulator-01","boot_id":"test-boot-01","sequence":1,"uptime_ms":30000,"measurements":{"internal_temperature_c":23.5,"internal_humidity_percent":55.2,"external_temperature_c":18.4,"water_temperature_c":20.7},"sensor_status":{"internal_sht31":"ok","external_sht31":"ok","water_ds18b20":"ok"}}'
+  -m '{"schema_version":1,"device_id":"simulator-01","boot_id":"test-boot-01","sequence":1,"uptime_ms":30000,"measurements":{"internal_temperature_c":23.5,"internal_humidity_percent":55.2,"external_temperature_c":18.4,"water_temperature_c":20.7},"sensor_status":{"internal_sht31":"ok","external_ds18b20":"ok","water_ds18b20":"ok"}}'
 ```
 
 **Expected**: Nothing in debug panel; four messages to `validated/` topics.
@@ -68,7 +68,7 @@ One sensor fails; other measurements still validate:
 docker exec microhydros-mosquitto mosquitto_pub -h localhost \
   -t microhydros/v1/devices/simulator-01/telemetry/raw \
   -q 1 \
-  -m '{"schema_version":1,"device_id":"simulator-01","boot_id":"test-boot-01","sequence":2,"uptime_ms":60000,"measurements":{"internal_temperature_c":23.5,"internal_humidity_percent":55.2,"external_temperature_c":null,"water_temperature_c":20.7},"sensor_status":{"internal_sht31":"ok","external_sht31":"read_error","water_ds18b20":"ok"}}'
+  -m '{"schema_version":1,"device_id":"simulator-01","boot_id":"test-boot-01","sequence":2,"uptime_ms":60000,"measurements":{"internal_temperature_c":23.5,"internal_humidity_percent":55.2,"external_temperature_c":null,"water_temperature_c":20.7},"sensor_status":{"internal_sht31":"ok","external_ds18b20":"read_error","water_ds18b20":"ok"}}'
 ```
 
 **Expected**: Three measurements to `validated/` topics; one rejection in debug with `reason_code: "sensor_read_error"`.
@@ -81,7 +81,7 @@ Device_id in payload does not match topic:
 docker exec microhydros-mosquitto mosquitto_pub -h localhost \
   -t microhydros/v1/devices/simulator-01/telemetry/raw \
   -q 1 \
-  -m '{"schema_version":1,"device_id":"esp32s3-01","boot_id":"test-boot-01","sequence":3,"uptime_ms":90000,"measurements":{"internal_temperature_c":23.5,"internal_humidity_percent":55.2,"external_temperature_c":18.4,"water_temperature_c":20.7},"sensor_status":{"internal_sht31":"ok","external_sht31":"ok","water_ds18b20":"ok"}}'
+  -m '{"schema_version":1,"device_id":"esp32s3-01","boot_id":"test-boot-01","sequence":3,"uptime_ms":90000,"measurements":{"internal_temperature_c":23.5,"internal_humidity_percent":55.2,"external_temperature_c":18.4,"water_temperature_c":20.7},"sensor_status":{"internal_sht31":"ok","external_ds18b20":"ok","water_ds18b20":"ok"}}'
 ```
 
 **Expected**: No messages to `validated/` topics; one rejection in debug with `reason_code: "device_id_mismatch"`.

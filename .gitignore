@@ -9,5 +9,13 @@
 build/
 dist/
 
+# ESP-IDF per-checkout config (contains plaintext WiFi password) and
+# component-manager output
+firmware/esp32s3/sdkconfig
+firmware/esp32s3/sdkconfig.old
+firmware/esp32s3/dependencies.lock
+firmware/esp32s3/managed_components/
+firmware/esp32s3/.vscode/
+
 #Local Docker secrets
 .env

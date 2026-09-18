@@ -6,7 +6,7 @@ Draft — subject to team review and approval.
 
 ## Architecture overview
 
-MicroHydros uses an ESP32-S3 sensor node to collect environmental measurements. The ESP32-S3 performs basic sensor-read checks and publishes one raw telemetry message every 30 seconds over Wi-Fi using MQTT.
+MicroHydros uses an ESP32-S3 sensor node to collect environmental measurements. The ESP32-S3 performs basic sensor-read checks and publishes one raw telemetry message every 5 seconds over Wi-Fi using MQTT.
 
 Mosquitto, Node-RED, InfluxDB and Grafana run as separate Docker containers on a laptop. Mosquitto routes MQTT messages. Node-RED validates, timestamps and separates the measurements before writing valid data to InfluxDB. Grafana reads the stored measurements from InfluxDB and displays current and historical data.
 
@@ -82,7 +82,7 @@ Services inside Docker communicate using their Docker Compose service names. The
 
 ## Measurement data flow
 
-1. The ESP32-S3 reads all three sensors every 30 seconds.
+1. The ESP32-S3 reads all three sensors every 5 seconds.
 2. It checks for sensor communication and conversion failures.
 3. It creates one raw JSON payload containing all four measurements, sensor statuses, device ID, boot ID, sequence number and uptime.
 4. It publishes the payload to the device’s raw MQTT topic using QoS 1.
@@ -126,7 +126,7 @@ microhydros/v1/devices/+/status
 
 | Property               | Decision           |
 | ---------------------- | ------------------ |
-| Measurement interval   | 30 seconds         |
+| Measurement interval   | 5 seconds          |
 | MQTT QoS               | 1                  |
 | Retained telemetry     | No                 |
 | Retained device status | Yes                |

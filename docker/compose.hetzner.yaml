@@ -1,11 +1,23 @@
+# Standalone Compose file for deploying the backend on the shared Hetzner
+# server. Not layered on top of ../compose.yaml (Compose merges "ports:"
+# lists across -f files rather than replacing them, which would try to bind
+# the default ports too — already taken by the existing pm-iot-ui stack:
+# 1883/1880/8086/3000). Deploy with just this file:
+#
+#   docker compose -f docker/compose.hetzner.yaml --env-file .env up -d
+#
+# See docker/README.md for service descriptions and
+# docker/node-red/settings.hetzner.js for why Node-RED needs adminAuth here
+# but not in local dev.
+
 services:
   mosquitto:
     image: eclipse-mosquitto:2
     container_name: microhydros-mosquitto
     ports:
-      - "1883:1883"
+      - "1884:1883"
     volumes:
-      - ./docker/mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
       - mosquitto_data:/mosquitto/data
       - mosquitto_log:/mosquitto/log
     networks:
@@ -16,9 +28,10 @@ services:
     image: nodered/node-red:5.0.7
     container_name: microhydros-node-red
     ports:
-      - "1880:1880"
+      - "1881:1880"
     volumes:
       - node_red_data:/data
+      - ./node-red/settings.hetzner.js:/data/settings.js:ro
     environment:
       INFLUXDB_URL: http://influxdb:8086
       INFLUXDB_ORG: ${INFLUXDB_ORG}
@@ -34,7 +47,7 @@ services:
     image: influxdb:2.9.1
     container_name: microhydros-influxdb
     ports:
-      - "8086:8086"
+      - "8087:8086"
     volumes:
       - influxdb_data:/var/lib/influxdb2
       - influxdb_config:/etc/influxdb2
@@ -53,11 +66,11 @@ services:
     image: grafana/grafana:13.2.1
     container_name: microhydros-grafana
     ports:
-      - "3000:3000"
+      - "3002:3000"
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./docker/grafana/provisioning:/etc/grafana/provisioning:ro
-      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_USERNAME}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
